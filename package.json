@@ -1,9 +1,9 @@
 {
   "name": "redux-variable-number-fields",
   "description": "Component for a form segment that requires a variable number of rows of custom fields. Uses react and redux",
-  "author": "Juho Vepsalainen",
-  "user": "survivejs",
-  "version": "3.0.0",
+  "author": "Eddie Law",
+  "user": "ArcQ",
+  "version": "0.0.0",
   "scripts": {
     "start": "webpack-dev-server",
     "test": "jest",
