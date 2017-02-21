@@ -1,6 +1,9 @@
 demo/
-dist/
-tests/
+__tests__/
 src/
 .*
-
+node_modules/
+docs/
+gh-pages/
+coverage/
+webpack.config.babel.js
