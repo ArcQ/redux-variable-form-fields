@@ -17,8 +17,8 @@ const config = {
     src: path.join(ROOT_PATH, 'src'),
     docs: path.join(ROOT_PATH, 'docs')
   },
-  filename: 'boilerplate',
-  library: 'Boilerplate'
+  filename: 'redux-variable-number-fields',
+  library: 'redux-variable-number-fields'
 };
 
 process.env.BABEL_ENV = TARGET;
