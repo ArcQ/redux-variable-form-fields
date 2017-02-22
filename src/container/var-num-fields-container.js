@@ -73,7 +73,10 @@ const mapStateToProps = state => ({
 });
 
 VarNumFieldsContainer.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.shape({})),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.shape({})),
+    PropTypes.element,
+  ]),
   shapeArr: PropTypes.arrayOf(PropTypes.string),
   formKey: PropTypes.string.isRequired,
 };

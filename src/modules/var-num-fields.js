@@ -1,5 +1,4 @@
 import update from 'immutability-helper';
-import Immutable from 'immutable';
 
 // ------------------------------------
 // Constants

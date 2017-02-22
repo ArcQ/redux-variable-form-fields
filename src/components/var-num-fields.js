@@ -21,9 +21,14 @@ function linkIfVarNumField(ele, row, inputState, createFieldInputHandler, fieldD
         : {});
       return f;
     }
-    return React.Children.map(ele.props.children, child =>
-      linkIfVarNumField(child, row, inputState, createFieldInputHandler, fieldData),
-    )
+    return update(ele, {
+      props: {
+        children: {
+          $set: React.Children.map(ele.props.children, child =>
+            linkIfVarNumField(child, row, inputState, createFieldInputHandler, fieldData)),
+        },
+      },
+    });
   }
 }
 
@@ -31,34 +36,20 @@ const renderInputs = function (props) {
   const {
     inputList,
     createFieldInputHandler,
-    children: fieldsArr,
-    fieldData
+    children: fieldObj,
+    fieldData,
   } = props;
-  console.log('fieldData',fieldData);
-  return inputList.map((inputState, row) =>
-    // fieldsArr.map(field => {
-    //   // if no field.key, we just wont' track it, no err req
-    //   const x = update(field,
-    //     (field.key)
-    //     ? {
-    //       props: {
-    //         value: { $set: inputState.get(field.key) },
-    //         onChange: { $set: createFieldInputHandler(row, field.key) },
-    //       },
-    //     }
-    //     : {});
-    //   return x;
-    // }
-    // ),
-    fieldsArr.map(field => linkIfVarNumField(field, row, inputState, createFieldInputHandler, fieldData))
-  );
+  return inputList.map((inputState, row) => {
+    if (fieldObj.constructor !== Array) {
+      return linkIfVarNumField(fieldObj, row, inputState, createFieldInputHandler, fieldData);
+    }
+    return fieldObj.map(field =>
+      linkIfVarNumField(field, row, inputState, createFieldInputHandler, fieldData));
+  });
 };
 
-export const VarNumFields = props => {
-  return (<div>
-    {renderInputs(props)}
-  </div>
-  )};
+export const VarNumFields = props =>
+  <div> { renderInputs(props) } </div>;
 
 VarNumFields.propTypes = {
   isCalcResult: PropTypes.bool.isRequired,
