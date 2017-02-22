@@ -15,17 +15,17 @@ const config = {
   paths: {
     dist: path.join(ROOT_PATH, 'dist'),
     src: path.join(ROOT_PATH, 'src'),
-    docs: path.join(ROOT_PATH, 'docs')
+    docs: path.join(ROOT_PATH, 'docs'),
   },
   filename: 'redux-variable-number-fields',
-  library: 'redux-variable-number-fields'
+  library: 'redux-variable-number-fields',
 };
 
 process.env.BABEL_ENV = TARGET;
 
 const common = {
   resolve: {
-    extensions: ['', '.js', '.jsx', '.css', '.png', '.jpg']
+    extensions: ['', '.js', '.jsx', '.css', '.png', '.jpg'],
   },
   module: {
     preLoaders: [
@@ -34,35 +34,35 @@ const common = {
         loaders: ['eslint'],
         include: [
           config.paths.docs,
-          config.paths.src
-        ]
-      }
+          config.paths.src,
+        ],
+      },
     ],
     loaders: [
       {
         test: /\.md$/,
-        loaders: ['catalog/lib/loader', 'raw']
+        loaders: ['catalog/lib/loader', 'raw'],
       },
       {
         test: /\.png$/,
         loader: 'url?limit=100000&mimetype=image/png',
-        include: config.paths.docs
+        include: config.paths.docs,
       },
       {
         test: /\.jpg$/,
         loader: 'file',
-        include: config.paths.docs
+        include: config.paths.docs,
       },
       {
         test: /\.json$/,
         loader: 'json',
-        include: path.join(ROOT_PATH, 'package.json')
-      }
-    ]
+        include: path.join(ROOT_PATH, 'package.json'),
+      },
+    ],
   },
   plugins: [
-    new SystemBellPlugin()
-  ]
+    new SystemBellPlugin(),
+  ],
 };
 
 const siteCommon = {
@@ -72,43 +72,44 @@ const siteCommon = {
       inject: false,
       mobile: true,
       title: pkg.name,
-      appMountId: 'app'
+      appMountId: 'app',
     }),
     new webpack.DefinePlugin({
       NAME: JSON.stringify(pkg.name),
       USER: JSON.stringify(pkg.user),
-      VERSION: JSON.stringify(pkg.version)
-    })
-  ]
+      VERSION: JSON.stringify(pkg.version),
+    }),
+  ],
 };
 
-if (TARGET === 'start') {
+// if (TARGET === 'start') {
+if (TARGET === 's') {
   module.exports = merge(common, siteCommon, {
     devtool: 'eval-source-map',
     entry: {
-      docs: [config.paths.docs]
+      docs: [config.paths.docs],
     },
     plugins: [
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': '"development"'
+        'process.env.NODE_ENV': '"development"',
       }),
-      new webpack.HotModuleReplacementPlugin()
+      new webpack.HotModuleReplacementPlugin(),
     ],
     module: {
       loaders: [
         {
           test: /\.css$/,
-          loaders: ['style', 'css']
+          loaders: ['style', 'css'],
         },
         {
           test: /\.jsx?$/,
           loaders: ['babel?cacheDirectory'],
           include: [
             config.paths.docs,
-            config.paths.src
-          ]
-        }
-      ]
+            config.paths.src,
+          ],
+        },
+      ],
     },
     devServer: {
       historyApiFallback: true,
@@ -117,8 +118,8 @@ if (TARGET === 'start') {
       progress: true,
       host: process.env.HOST,
       port: process.env.PORT,
-      stats: 'errors-only'
-    }
+      stats: 'errors-only',
+    },
   });
 }
 
@@ -128,59 +129,61 @@ if (TARGET === 'gh-pages' || TARGET === 'gh-pages:stats') {
       app: config.paths.docs,
       vendors: [
         'react',
-        'react-dom'
-      ]
+        'react-dom',
+      ],
     },
     output: {
       path: './gh-pages',
       filename: '[name].[chunkhash].js',
-      chunkFilename: '[chunkhash].js'
+      chunkFilename: '[chunkhash].js',
     },
     plugins: [
       new CleanWebpackPlugin(['gh-pages'], {
-        verbose: false
+        verbose: false,
       }),
       new ExtractTextPlugin('[name].[chunkhash].css'),
       new webpack.DefinePlugin({
           // This affects the react lib size
-        'process.env.NODE_ENV': '"production"'
+        'process.env.NODE_ENV': '"production"',
       }),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.UglifyJsPlugin({
         compress: {
-          warnings: false
-        }
+          warnings: false,
+        },
       }),
       new webpack.optimize.CommonsChunkPlugin(
         'vendor',
-        '[name].[chunkhash].js'
-      )
+        '[name].[chunkhash].js',
+      ),
     ],
     module: {
       loaders: [
         {
           test: /\.css$/,
-          loader: ExtractTextPlugin.extract('style', 'css')
+          loader: ExtractTextPlugin.extract('style', 'css'),
         },
         {
           test: /\.jsx?$/,
           loaders: ['babel'],
           include: [
             config.paths.docs,
-            config.paths.src
-          ]
-        }
-      ]
-    }
+            config.paths.src,
+          ],
+        },
+      ],
+    },
   });
 }
+
+console.log(config.paths.dist);
 
 const distCommon = {
   devtool: 'source-map',
   output: {
     path: config.paths.dist,
     libraryTarget: 'umd',
-    library: config.library
+    library: config.library,
   },
   entry: config.paths.src,
   externals: {
@@ -188,43 +191,43 @@ const distCommon = {
       commonjs: 'react',
       commonjs2: 'react',
       amd: 'react',
-      root: 'react'
-    }
+      root: 'react',
+    },
   },
   module: {
     loaders: [
       {
         test: /\.jsx?$/,
         loaders: ['babel'],
-        include: config.paths.src
-      }
-    ]
+        include: config.paths.src,
+      },
+    ],
   },
   plugins: [
-    new SystemBellPlugin()
-  ]
+    new SystemBellPlugin(),
+  ],
 };
 
-if (TARGET === 'dist') {
+if (TARGET === 'dist' || TARGET === 'dev') {
   module.exports = merge(distCommon, {
     output: {
-      filename: `${config.filename}.js`
-    }
+      filename: `${config.filename}.js`,
+    },
   });
 }
 
 if (TARGET === 'dist:min') {
   module.exports = merge(distCommon, {
     output: {
-      filename: `${config.filename}.min.js`
+      filename: `${config.filename}.min.js`,
     },
     plugins: [
       new webpack.optimize.UglifyJsPlugin({
         compress: {
-          warnings: false
-        }
-      })
-    ]
+          warnings: false,
+        },
+      }),
+    ],
   });
 }
 

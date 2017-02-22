@@ -13,6 +13,7 @@
     "gh-pages": "webpack",
     "gh-pages:deploy": "gh-pages -d gh-pages",
     "gh-pages:stats": "webpack --profile --json > stats.json",
+    "dev": "webpack --watch",
     "dist": "webpack",
     "dist:min": "webpack",
     "dist:modules": "rimraf ./dist-modules && babel ./src --out-dir ./dist-modules",
