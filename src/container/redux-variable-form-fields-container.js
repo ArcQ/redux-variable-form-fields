@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
-import VarNumFields from '../components/var-num-fields';
-import { actions, selectors } from '../modules/var-num-fields';
+import ReduxVariableFormFields from '../components/redux-variable-form-fields';
+import { actions, selectors } from '../modules/redux-variable-form-fields';
 
 let inputList = Immutable.fromJS([{}]);
 
@@ -40,17 +40,16 @@ function getHandlerCreator(props, handler) {
   const { formKey, shapeArr } = props;
   return (...renderArgs) => (runtimeArg) => {
     inputList = handler(renderArgs, shapeArr, runtimeArg);
-    console.log(inputList.toJS());
     props.modifyVarFields(formKey, inputList);
   };
 }
 
-const VarNumFieldsContainer = props => {
+const ReduxVariableFormFieldsContainer = props => {
   const { getFieldDataHandler,  ...rest } = props;
   const fieldData = getFieldDataHandler(props.formKey);
   console.log('fieldData',fieldData);
   return (<div>
-    { VarNumFields({
+    { ReduxVariableFormFields({
       inputList,
       ...rest,
       fieldData,
@@ -72,7 +71,7 @@ const mapStateToProps = state => ({
   // percentColor: selectors.getCalcPercentColor(state),
 });
 
-VarNumFieldsContainer.propTypes = {
+ReduxVariableFormFieldsContainer.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.shape({})),
     PropTypes.element,
@@ -81,4 +80,4 @@ VarNumFieldsContainer.propTypes = {
   formKey: PropTypes.string.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(VarNumFieldsContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ReduxVariableFormFieldsContainer);

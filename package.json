@@ -1,5 +1,5 @@
 {
-  "name": "redux-variable-number-fields",
+  "name": "redux-variable-field-fields",
   "description": "Component for a form segment that requires a variable number of rows of custom fields. Uses react and redux",
   "author": "Eddie Law",
   "user": "ArcQ",
@@ -22,7 +22,7 @@
     "postpublish": "npm run gh-pages && npm run gh-pages:deploy",
     "postinstall": "node lib/post_install.js"
   },
-  "main": "dist/redux-variable-number-fields.js",
+  "main": "dist/redux-variable-form-fields.js",
   "module": "src",
   "jsnext:main": "src",
   "devDependencies": {
@@ -74,11 +74,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ArcQ/redux-variable-number-fields"
+    "url": "https://github.com/ArcQ/redux-variable-form-fields"
   },
-  "homepage": "https://github.com/ArcQ/redux-variable-number-fields",
+  "homepage": "https://github.com/ArcQ/redux-variable-form-fields",
   "bugs": {
-    "url": "https://github.com/ArcQ/redux-variable-number-fields/issues"
+    "url": "https://github.com/ArcQ/redux-variable-form-fields/issues"
   },
   "jest": {
     "collectCoverage": true,

@@ -17,8 +17,8 @@ const config = {
     src: path.join(ROOT_PATH, 'src'),
     docs: path.join(ROOT_PATH, 'docs'),
   },
-  filename: 'redux-variable-number-fields',
-  library: 'redux-variable-number-fields',
+  filename: 'redux-variable-form-fields',
+  library: 'redux-variable-form-fields',
 };
 
 process.env.BABEL_ENV = TARGET;

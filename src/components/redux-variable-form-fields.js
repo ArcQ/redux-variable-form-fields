@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import update from 'immutability-helper';
 
-function linkIfVarNumField(ele, row, inputState, createFieldInputHandler, fieldData) {
+function linkIfVarInput(ele, row, inputState, createFieldInputHandler, fieldData) {
   if (ele && ele.props) {
-    if (ele.props.varNumField) {
-      const { varNumField, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
+    if (ele.props.varInput) {
+      const { varInput, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
       // if no field.key, we just wont' track it, no err req
       const f = update(ele,
         (ele.key)
@@ -25,7 +25,7 @@ function linkIfVarNumField(ele, row, inputState, createFieldInputHandler, fieldD
       props: {
         children: {
           $set: React.Children.map(ele.props.children, child =>
-            linkIfVarNumField(child, row, inputState, createFieldInputHandler, fieldData)),
+            linkIfVarInput(child, row, inputState, createFieldInputHandler, fieldData)),
         },
       },
     });
@@ -41,18 +41,18 @@ const renderInputs = function (props) {
   } = props;
   return inputList.map((inputState, row) => {
     if (fieldObj.constructor !== Array) {
-      return linkIfVarNumField(fieldObj, row, inputState, createFieldInputHandler, fieldData);
+      return linkIfVarInput(fieldObj, row, inputState, createFieldInputHandler, fieldData);
     }
     return fieldObj.map(field =>
-      linkIfVarNumField(field, row, inputState, createFieldInputHandler, fieldData));
+      linkIfVarInput(field, row, inputState, createFieldInputHandler, fieldData));
   });
 };
 
-export const VarNumFields = props =>
+export const ReduxVariableFormFields = props =>
   <div> { renderInputs(props) } </div>;
 
-VarNumFields.propTypes = {
+ReduxVariableFormFields.propTypes = {
   isCalcResult: PropTypes.bool.isRequired,
 };
 
-export default VarNumFields;
+export default ReduxVariableFormFields;

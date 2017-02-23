@@ -34,7 +34,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 
 export function getFieldDataHandler(state) {
-  return formKey => state.varNumFields[formKey];
+  return formKey => state.reduxVariableFormFields[formKey];
 }
 
 export const selectors = {
@@ -47,7 +47,7 @@ export const selectors = {
 
 const initialState = {};
 
-export default function varNumFieldsReducer(state = initialState, action) {
+export default function reduxVariableFormFieldsReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];
   return handler ? handler(state, action) : state;
 }
