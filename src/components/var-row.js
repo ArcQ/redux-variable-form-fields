@@ -5,6 +5,10 @@ function makeVarInput(ele, row, createFieldInputHandler, fieldData) {
   const { varInput, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
   // if no field.key, we just wont' track it, no err req
   // should probably use React.cloneElement()
+  console.log('ele', ele);
+  console.log('row', row);
+  console.log('create', createFieldInputHandler);
+  console.log('fieldData', fieldData);
   const input = update(ele,
     (ele.key)
     ? {
@@ -28,9 +32,9 @@ function makeVarRemove(ele) {
 function linkIfVarInput(ele, row, createFieldInputHandler, fieldData, inputState) {
   if (ele && ele.props) {
     if (ele.props.varInput) {
-      return makeVarInput(ele);
+      return makeVarInput(ele,row,createFieldInputHandler, fieldData, inputState);
     } else if (ele.props.varRemove) {
-      return makeVarRemove(ele);
+      return makeVarRemove(ele,row,createFieldInputHandler, fieldData, inputState);
     }
     return update(ele, {
       props: {
@@ -64,7 +68,6 @@ export const ReduxVariableFormFields = props =>
   <div> { renderInputs(props) } </div>;
 
 ReduxVariableFormFields.propTypes = {
-  isCalcResult: PropTypes.bool.isRequired,
 };
 
 export default ReduxVariableFormFields;

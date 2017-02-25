@@ -1,5 +1,5 @@
 {
-  "name": "redux-variable-field-fields",
+  "name": "redux-variable-form-fields",
   "description": "Component for a form segment that requires a variable number of rows of custom fields. Uses react and redux",
   "author": "Eddie Law",
   "user": "ArcQ",

@@ -176,8 +176,6 @@ if (TARGET === 'gh-pages' || TARGET === 'gh-pages:stats') {
   });
 }
 
-console.log(config.paths.dist);
-
 const distCommon = {
   devtool: 'source-map',
   output: {
