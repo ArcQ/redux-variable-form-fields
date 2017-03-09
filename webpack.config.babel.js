@@ -25,6 +25,7 @@ process.env.BABEL_ENV = TARGET;
 
 const common = {
   resolve: {
+    root: config.paths.src,
     extensions: ['', '.js', '.jsx', '.css', '.png', '.jpg'],
   },
   module: {
@@ -177,6 +178,10 @@ if (TARGET === 'gh-pages' || TARGET === 'gh-pages:stats') {
 }
 
 const distCommon = {
+  resolve: {
+    root: config.paths.src,
+    extensions: ['', '.js', '.jsx', '.css', '.png', '.jpg'],
+  },
   devtool: 'source-map',
   output: {
     path: config.paths.dist,
