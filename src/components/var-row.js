@@ -1,66 +1,66 @@
 import React, { PropTypes } from 'react';
 import update from 'immutability-helper';
+import { findEleWithPropAndModify } from 'utils/utils';
 
-function makeVarInput(ele, row, createFieldInputHandler, fieldData) {
-  const { varInput, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
-  // if no field.key, we just wont' track it, no err req
-  // should probably use React.cloneElement()
-  console.log('ele', ele);
-  console.log('row', row);
-  console.log('create', createFieldInputHandler);
-  console.log('fieldData', fieldData);
-  const input = update(ele,
-    (ele.key)
-    ? {
-      props: {
-        $set: {
-          ...restProps,
-          key: ele.key + row,
-          value: (fieldData && fieldData.getIn([row, ele.key + row])) || '',
-          onChange: createFieldInputHandler(row, ele.key + row),
+function getCreateVarInputHandler(createFieldInputHandler, formData) {
+  return (ele, row) => {
+    // remove varInput as it won't be natively compatible with the input element
+    const { varInput, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
+    const key = `${ele.key}${row}`;
+    // if no field.key, we just wont' track it, no err req
+    // should probably use React.cloneElement()
+    return update(ele,
+      (ele.key)
+      ? {
+        props: {
+          $set: {
+            ...restProps,
+            key,
+            value: (formData && formData.getIn([row, key])) || '',
+            onChange: createFieldInputHandler(row, formData, key),
+          },
         },
-      },
-    }
-    : {});
-  return input;
+      }
+      : {});
+  };
 }
 
-function makeVarRemove(ele) {
-
-}
-
-function linkIfVarInput(ele, row, createFieldInputHandler, fieldData, inputState) {
-  if (ele && ele.props) {
-    if (ele.props.varInput) {
-      return makeVarInput(ele,row,createFieldInputHandler, fieldData, inputState);
-    } else if (ele.props.varRemove) {
-      return makeVarRemove(ele,row,createFieldInputHandler, fieldData, inputState);
-    }
-    return update(ele, {
-      props: {
-        children: {
-          $set: React.Children.map(ele.props.children, child =>
-            linkIfVarInput(child, row, createFieldInputHandler, fieldData, inputState)),
+function getCreateVarRemoveHandler(createRemoveRowHandler) {
+  return (ele, row) => {
+    // remove varRemove as it won't be natively compatible with the button element
+    const { varRemove, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
+    const input = update(ele,
+      {
+        props: {
+          $set: {
+            ...restProps,
+            onClick: createRemoveRowHandler(row),
+          },
         },
-      },
-    });
-  }
-  return null;
+      });
+    return input;
+  };
 }
 
 const renderInputs = function (props) {
   const {
-    inputList,
     createFieldInputHandler,
+    createRemoveRowHandler,
     children: fieldObj,
-    fieldData,
+    formData,
   } = props;
-  return inputList.map((inputState, row) => {
+  const modifierArr = [
+    { propKey: 'varInput', modifier: getCreateVarInputHandler(createFieldInputHandler, formData) },
+    { propKey: 'varRemove', modifier: getCreateVarRemoveHandler(createRemoveRowHandler) },
+  ];
+
+  return formData.map((inputState, row) => {
     if (fieldObj.constructor !== Array) {
-      return linkIfVarInput(fieldObj, row, createFieldInputHandler, fieldData, inputState);
+      return findEleWithPropAndModify(fieldObj, row, modifierArr);
     }
     return fieldObj.map(field =>
-      linkIfVarInput(field, row, createFieldInputHandler, fieldData, inputState));
+      findEleWithPropAndModify(field, row, modifierArr),
+    );
   });
 };
 

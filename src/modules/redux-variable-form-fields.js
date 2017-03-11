@@ -1,4 +1,5 @@
 import update from 'immutability-helper';
+import Immutable from 'immutable';
 
 // ------------------------------------
 // Constants
@@ -33,12 +34,12 @@ const ACTION_HANDLERS = {
 // Selectors
 // ------------------------------------
 
-export function getFieldDataHandler(state) {
+export function getFormDataHandler(state) {
   return formKey => state.reduxVariableFormFields[formKey];
 }
 
 export const selectors = {
-  getFieldDataHandler,
+  getFormDataHandler,
 };
 
 // ------------------------------------

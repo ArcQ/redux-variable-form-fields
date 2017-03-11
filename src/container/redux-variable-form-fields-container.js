@@ -1,4 +1,4 @@
-import ReduxVariableFormFields from '../components/redux-variable-form-fields';
+import ReduxVariableFormFields from 'components/redux-variable-form-fields';
 
 const ReduxVariableFormFieldsContainer = props => (ReduxVariableFormFields(props));
 

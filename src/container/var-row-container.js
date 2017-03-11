@@ -1,60 +1,42 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
+import { getHandlerCreator } from 'utils/utils';
 import VarRow from '../components/var-row';
 import { actions, selectors } from '../modules/redux-variable-form-fields';
 
-let inputList = Immutable.fromJS([{}]);
-
-function getNestedValFromKeyArr(obj, keyArr, i) {
-  const nestedObj = obj[keyArr[i]];
-  if (i < keyArr.length) {
-    return getNestedValFromKeyArr(nestedObj, keyArr, i + 1);
-  }
-  return nestedObj;
-}
-
-function fieldInputHandler([row, fieldKey], shapeArr, dataObj) {
-  // dataObj refers to the obj/str that the input passes in
-  /*
+// dataObj refers to the obj/str that the input passes in
+/*
   shapeArr is for incase the fieldData is actually nested in dataObj
-  eg. event.target.value > shapeArr = ['target', 'value']
-  */
-  let fieldData = dataObj;
-  if (shapeArr && shapeArr.length > 0) {
-    fieldData = getNestedValFromKeyArr(dataObj, shapeArr);
-  }
-  return inputList.setIn([row, fieldKey], fieldData);
+  eg. if event.target.value = x then shapeArr = ['target', 'value']
+      if event =x then shapeArr = undefined
+      */
+function fieldInputHandler([row, formData, fieldKey], shapeArr, dataObj) {
+  const getNestedValFromKeyArr = (obj, keyArr, i) =>
+    ((i < keyArr.length) ? getNestedValFromKeyArr(obj[keyArr[i]], keyArr, i + 1) : obj[keyArr[i]]);
+  const fieldData = (shapeArr && shapeArr.length > 0)
+    ? getNestedValFromKeyArr(dataObj, shapeArr)
+    : dataObj;
+  return formData.setIn([row, fieldKey], fieldData);
 }
 
-function removeRowHandler(row) {
-  inputList.remove(row);
+function removeRowHandler([row, formData]) {
+  formData.remove(row);
 }
 
-function addRowHandler() {
-  return () => {
-    inputList.push(Immutable.Map.of({}));
-  };
-}
-function getHandlerCreator(props, handler) {
-  const { formKey, shapeArr } = props;
-  return (...renderArgs) => (runtimeArg) => {
-    inputList = handler(renderArgs, shapeArr, runtimeArg);
-    props.modifyVarFields(formKey, inputList);
-  };
+function getInitialFormData(key) {
+  return Immutable.fromJS([{}]);
 }
 
-const VarRowContainer = props => {
-  const { getFieldDataHandler,  ...rest } = props;
-  const fieldData = getFieldDataHandler(props.formKey);
+const VarRowContainer = (props) => {
+  const { getFormDataHandler, ...rest } = props;
+  const formData = getFormDataHandler(props.formKey) || getInitialFormData(props.formKey);
   return (<div>
     { VarRow({
-      inputList,
       ...rest,
-      fieldData,
+      formData,
       createFieldInputHandler: getHandlerCreator(props, fieldInputHandler),
       createRemoveRowHandler: getHandlerCreator(props, removeRowHandler),
-      createAddRowHandler: getHandlerCreator(props, addRowHandler),
     })
     }
   </div>);
@@ -65,7 +47,7 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = state => ({
-  getFieldDataHandler: selectors.getFieldDataHandler(state),
+  getFormDataHandler: selectors.getFormDataHandler(state),
 });
 
 VarRowContainer.propTypes = {
@@ -75,6 +57,7 @@ VarRowContainer.propTypes = {
   ]),
   shapeArr: PropTypes.arrayOf(PropTypes.string),
   formKey: PropTypes.string.isRequired,
+  getFormDataHandler: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(VarRowContainer);
