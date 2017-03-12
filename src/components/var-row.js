@@ -16,7 +16,7 @@ function getCreateVarInputHandler(createFieldInputHandler, formData) {
           $set: {
             ...restProps,
             key,
-            value: (formData && formData.getIn([row, key])) || '',
+            value: (formData && formData[row][key]) || '',
             onChange: createFieldInputHandler(row, formData, key),
           },
         },

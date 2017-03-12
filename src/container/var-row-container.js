@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Immutable from 'immutable';
+import update from 'immutability-helper';
 import { getHandlerCreator } from 'utils/utils';
 import VarRow from '../components/var-row';
 import { actions, selectors } from '../modules/redux-variable-form-fields';
@@ -17,20 +17,26 @@ function fieldInputHandler([row, formData, fieldKey], shapeArr, dataObj) {
   const fieldData = (shapeArr && shapeArr.length > 0)
     ? getNestedValFromKeyArr(dataObj, shapeArr)
     : dataObj;
-  return formData.setIn([row, fieldKey], fieldData);
+  //return formData.setIn([row, fieldKey], fieldData);
+  return update(formData, {
+    [row]: {
+      [fieldKey]: { $set: fieldData }
+    }
+  });
 }
 
 function removeRowHandler([row, formData]) {
-  formData.remove(row);
+  return update(formData, { $splice: [row, 0] });
+  // formData.remove(row);
 }
 
-function getInitialFormData(key) {
-  return Immutable.fromJS([{}]);
+function getInitialFormData() {
+  return [{}];
 }
 
 const VarRowContainer = (props) => {
   const { getFormDataHandler, ...rest } = props;
-  const formData = getFormDataHandler(props.formKey) || getInitialFormData(props.formKey);
+  const formData = getFormDataHandler(props.formKey) || getInitialFormData();
   return (<div>
     { VarRow({
       ...rest,
