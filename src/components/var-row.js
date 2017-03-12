@@ -64,10 +64,17 @@ const renderInputs = function (props) {
   });
 };
 
-export const ReduxVariableFormFields = props =>
+export const VarRow = props =>
   <div> { renderInputs(props) } </div>;
 
-ReduxVariableFormFields.propTypes = {
+VarRow.propTypes = {
+  createFieldInputHandler: PropTypes.func.isRequired,
+  createRemoveRowHandler: PropTypes.func.isRequired,
+  children: PropTypes.oneOf([
+    PropTypes.element,
+    PropTypes.arrayOf(PropTypes.element),
+  ]),
+  formData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
-export default ReduxVariableFormFields;
+export default VarRow;

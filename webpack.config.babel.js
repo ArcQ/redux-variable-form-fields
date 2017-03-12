@@ -1,11 +1,13 @@
 import * as path from 'path';
-
+/* eslint-disable import/no-extraneous-dependencies */
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import SystemBellPlugin from 'system-bell-webpack-plugin';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 import merge from 'webpack-merge';
+/* eslint-enable */
+
 
 const pkg = require('./package.json');
 
@@ -69,7 +71,9 @@ const common = {
 const siteCommon = {
   plugins: [
     new HtmlWebpackPlugin({
-      template: require('html-webpack-template'), // eslint-disable-line global-require
+      /* eslint-disable */
+      template: require('html-webpack-template'),
+      /* eslint-enable */
       inject: false,
       mobile: true,
       title: pkg.name,

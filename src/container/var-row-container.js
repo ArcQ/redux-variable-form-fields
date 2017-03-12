@@ -17,11 +17,10 @@ function fieldInputHandler([row, formData, fieldKey], shapeArr, dataObj) {
   const fieldData = (shapeArr && shapeArr.length > 0)
     ? getNestedValFromKeyArr(dataObj, shapeArr)
     : dataObj;
-  //return formData.setIn([row, fieldKey], fieldData);
   return update(formData, {
     [row]: {
-      [fieldKey]: { $set: fieldData }
-    }
+      [fieldKey]: { $set: fieldData },
+    },
   });
 }
 
