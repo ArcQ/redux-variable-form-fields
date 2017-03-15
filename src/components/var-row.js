@@ -25,16 +25,21 @@ function getCreateVarInputHandler(createFieldInputHandler, formData) {
   };
 }
 
-function getCreateVarRemoveHandler(createRemoveRowHandler) {
+function getCreateVarRemoveHandler(createRemoveRowHandler, formData) {
   return (ele, row) => {
-    // remove varRemove as it won't be natively compatible with the button element
-    const { varRemove, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
+    if (row === 0 && !ele.props.showFirstRow) return undefined;
+    // remove varRemove and showFirst as it won't be natively compatible with the button element
+    const {
+      varRemove, // eslint-disable-line no-unused-vars
+      showFirstRow, // eslint-disable-line no-unused-vars
+      ...restProps
+    } = ele.props;
     const input = update(ele,
       {
         props: {
           $set: {
             ...restProps,
-            onClick: createRemoveRowHandler(row),
+            onClick: createRemoveRowHandler(row, formData),
           },
         },
       });
@@ -51,7 +56,7 @@ const renderInputs = function (props) {
   } = props;
   const modifierArr = [
     { propKey: 'varInput', modifier: getCreateVarInputHandler(createFieldInputHandler, formData) },
-    { propKey: 'varRemove', modifier: getCreateVarRemoveHandler(createRemoveRowHandler) },
+    { propKey: 'varRemove', modifier: getCreateVarRemoveHandler(createRemoveRowHandler, formData) },
   ];
 
   return formData.map((inputState, row) => {
@@ -70,7 +75,7 @@ export const VarRow = props =>
 VarRow.propTypes = {
   createFieldInputHandler: PropTypes.func.isRequired,
   createRemoveRowHandler: PropTypes.func.isRequired,
-  children: PropTypes.oneOf([
+  children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
   ]),

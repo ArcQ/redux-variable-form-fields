@@ -25,8 +25,7 @@ function fieldInputHandler([row, formData, fieldKey], shapeArr, dataObj) {
 }
 
 function removeRowHandler([row, formData]) {
-  return update(formData, { $splice: [row, 0] });
-  // formData.remove(row);
+  return update(formData, { $splice: [[row, 1]] });
 }
 
 function getInitialFormData() {

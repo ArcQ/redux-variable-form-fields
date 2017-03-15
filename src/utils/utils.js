@@ -38,4 +38,8 @@ export function findEleWithPropAndModify(ele, row, modifierArr) {
   return undefined;
 }
 
-export default { findEleWithPropAndModify, getHandlerCreator };
+export function getInitialFormData() {
+  return ([{}]);
+}
+
+export default { findEleWithPropAndModify, getHandlerCreator, getInitialFormData };
