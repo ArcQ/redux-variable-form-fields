@@ -15,7 +15,7 @@ export function getHandlerCreator(props, handler) {
 /* given ele, recursively searches the ele and all children,
   for each that contain propKey, apply modifier
   eg of what modifierArr is: [{ propKey:'test' modifier:(ele) => returnNewEle }, ...]
-*/
+  */
 export function findEleWithPropAndModify(ele, row, modifierArr) {
   if (ele && ele.props) {
     /* if ele matches keys in modifierArr, then get newEle from cbObj.cb,
@@ -40,6 +40,24 @@ export function findEleWithPropAndModify(ele, row, modifierArr) {
 
 export function getInitialFormData() {
   return ([{}]);
+}
+
+function getFilteredPropsByKeys(props, allowedKeysArr) {
+  return Object.keys(props)
+    .filter(key => allowedKeysArr.includes(key))
+    .reduce((obj, key) => {
+      obj[key] = props[key];
+      return obj;
+    }, {});
+}
+
+export function passPropsToAllChildren(props, allowedKeysArr) {
+  const { children, ...restProps } = props; // eslint-disable-line no-unused-vars
+  const passProps = (allowedKeysArr && allowedKeysArr.length > 0)
+    ? getFilteredPropsByKeys(restProps, allowedKeysArr)
+    : restProps;
+  return React.Children.map(props.children, child =>
+    React.cloneElement(child, passProps));
 }
 
 export default { findEleWithPropAndModify, getHandlerCreator, getInitialFormData };

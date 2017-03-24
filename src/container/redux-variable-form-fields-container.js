@@ -9,6 +9,7 @@ ReduxVariableFormFieldsContainer.propTypes = {
     PropTypes.arrayOf(PropTypes.element),
   ]),
   formKey: PropTypes.string.isRequired,
+  formDataOnChange: PropTypes.func.isRequired,
 };
 
 export default ReduxVariableFormFieldsContainer;

@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
+import { passPropsToAllChildren } from 'utils/utils';
 
 export const ReduxVariableFormFields = props =>
   <div>
     {
-      React.Children.map(props.children, child =>
-        React.cloneElement(child, { formKey: props.formKey }))
+      passPropsToAllChildren(props, ['formKey', 'formDataOnChange'])
     }
   </div>;
 
