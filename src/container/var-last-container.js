@@ -5,17 +5,16 @@ import { getHandlerCreator, getInitialFormData } from 'utils/utils';
 import VarLast from 'components/var-last';
 import { actions, selectors } from 'modules/redux-variable-form-fields';
 
-function createAddRowHandler(formData) {
-  return () => update(formData, { $push: [{}] });
+function createAddRowHandler(data) {
+  return () => update(data, { $push: [{}] });
 }
 
 const VarLastContainer = (props) => {
-  const { getFormDataHandler, ...rest } = props;
-  const formData = getFormDataHandler(props.formKey) || getInitialFormData();
+  const { data, getFormDataHandler, ...rest } = props;
   return (<div>
     { VarLast({
       ...rest,
-      addRowHandler: getHandlerCreator(props, createAddRowHandler(formData))(),
+      addRowHandler: getHandlerCreator(props, createAddRowHandler(data))(),
     })
     }
   </div>);
@@ -34,7 +33,7 @@ VarLastContainer.propTypes = {
     PropTypes.arrayOf(PropTypes.shape({})),
     PropTypes.element,
   ]),
-  formKey: PropTypes.string.isRequired,
+  data: PropTypes.shape({}).isRequired,
   getFormDataHandler: PropTypes.func.isRequired,
 };
 

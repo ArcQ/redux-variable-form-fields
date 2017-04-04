@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import update from 'immutability-helper';
 import { findEleWithPropAndModify } from 'utils/utils';
 
-function getCreateVarInputHandler(createFieldInputHandler, formData) {
+function getCreateVarInputHandler(createFieldInputHandler, data) {
   return (ele, row) => {
     // remove varInput as it won't be natively compatible with the input element
     const { varInput, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
@@ -16,8 +16,8 @@ function getCreateVarInputHandler(createFieldInputHandler, formData) {
           $set: {
             ...restProps,
             key,
-            value: (formData && formData[row][key]) || '',
-            onChange: createFieldInputHandler(row, formData, key),
+            value: (data && data[row][key]) || '',
+            onChange: createFieldInputHandler(row, data, key),
           },
         },
       }
@@ -25,7 +25,7 @@ function getCreateVarInputHandler(createFieldInputHandler, formData) {
   };
 }
 
-function getCreateVarRemoveHandler(createRemoveRowHandler, formData) {
+function getCreateVarRemoveHandler(createRemoveRowHandler, data) {
   return (ele, row) => {
     if (row === 0 && !ele.props.showFirstRow) return undefined;
     // remove varRemove and showFirst as it won't be natively compatible with the button element
@@ -39,7 +39,7 @@ function getCreateVarRemoveHandler(createRemoveRowHandler, formData) {
         props: {
           $set: {
             ...restProps,
-            onClick: createRemoveRowHandler(row, formData),
+            onClick: createRemoveRowHandler(row, data),
           },
         },
       });
@@ -52,14 +52,14 @@ const renderInputs = function (props) {
     createFieldInputHandler,
     createRemoveRowHandler,
     children: fieldObj,
-    formData,
+    data,
   } = props;
   const modifierArr = [
-    { propKey: 'varInput', modifier: getCreateVarInputHandler(createFieldInputHandler, formData) },
-    { propKey: 'varRemove', modifier: getCreateVarRemoveHandler(createRemoveRowHandler, formData) },
+    { propKey: 'varInput', modifier: getCreateVarInputHandler(createFieldInputHandler, data) },
+    { propKey: 'varRemove', modifier: getCreateVarRemoveHandler(createRemoveRowHandler, data) },
   ];
 
-  return formData.map((inputState, row) => {
+  return data.map((inputState, row) => {
     if (fieldObj.constructor !== Array) {
       return findEleWithPropAndModify(fieldObj, row, modifierArr);
     }
@@ -79,7 +79,7 @@ VarRow.propTypes = {
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
   ]),
-  formData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default VarRow;
