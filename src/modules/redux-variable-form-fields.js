@@ -8,11 +8,11 @@ export const MODIFY_VAR_FIELDS = 'MODIFY_VAR_FIELDS';
 // ------------------------------------
 // Actions
 // ------------------------------------
-function modifyVarFields(formKey, formData) {
+function modifyVarFields(formKey, data) {
   return {
     type: MODIFY_VAR_FIELDS,
     formKey,
-    formData,
+    data,
   };
 }
 
@@ -25,7 +25,7 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [MODIFY_VAR_FIELDS]: (state, action) => update(state, {
-    [action.formKey]: { $set: action.formData },
+    [action.formKey]: { $set: action.data },
   }),
 };
 
@@ -33,13 +33,6 @@ const ACTION_HANDLERS = {
 // Selectors
 // ------------------------------------
 
-export function getFormDataHandler(state) {
-  return formKey => state.reduxVariableFormFields[formKey];
-}
-
-export const selectors = {
-  getFormDataHandler,
-};
 
 // ------------------------------------
 // Reducer

@@ -1,5 +1,10 @@
-import update from 'immutability-helper';
 import React from 'react';
+import update from 'immutability-helper';
+
+// update from immutability helper but as a promise so that it can be chained
+export function chainedUpdate(...args) {
+  return new Promise(resolve => resolve(update(...args)));
+}
 
 // get function that creates the custom handlers for each input + button
 // props, handler are passed in on init
@@ -7,9 +12,12 @@ import React from 'react';
 // at init, pass in props + handler to create callback for each child input/button
 // aggregates rendertime + runtime args, passes into handler, then modifies store (modifyVarFields)
 export function getHandlerCreator(props, handler) {
-  const { formKey, shapeArr, modifyVarFields } = props;
+  const { onChange, data, shapeArr } = props;
   return (...renderArgs) => runtimeArg =>
-    modifyVarFields(formKey, handler(renderArgs, shapeArr, runtimeArg));
+    chainedUpdate(
+      data,
+      { $set: handler(renderArgs, shapeArr, runtimeArg) },
+    ).then(newFormData => onChange(newFormData));
 }
 
 /* given ele, recursively searches the ele and all children,
