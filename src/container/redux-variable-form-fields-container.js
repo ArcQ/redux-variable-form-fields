@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import ReduxVariableFormFields from 'components/redux-variable-form-fields';
 import { passPropsToAllChildren } from 'utils/utils';
 
 const ReduxVariableFormFieldsContainer = props =>

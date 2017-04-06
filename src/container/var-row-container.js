@@ -1,9 +1,6 @@
 import React, { PropTypes } from 'react';
-// import { connect } from 'react-redux';
-import update from 'immutability-helper';
 import { getHandlerCreator } from 'utils/utils';
 import VarRow from '../components/var-row';
-// import { actions, selectors } from '../modules/redux-variable-form-fields';
 
 // dataObj refers to the obj/str that the input passes in
 /*
@@ -29,14 +26,14 @@ function removeRowHandler([row, data]) {
 }
 
 const VarRowContainer = props => (<div>
-    {
-      VarRow({
-        ...props,
-        createFieldInputHandler: getHandlerCreator(props, fieldInputHandler),
-        createRemoveRowHandler: getHandlerCreator(props, removeRowHandler),
-      })
-    }
-  </div>);
+  {
+    VarRow({
+      ...props,
+      createFieldInputHandler: getHandlerCreator(props, fieldInputHandler),
+      createRemoveRowHandler: getHandlerCreator(props, removeRowHandler),
+    })
+  }
+</div>);
 
 VarRowContainer.propTypes = {
   children: PropTypes.oneOfType([
@@ -49,4 +46,3 @@ VarRowContainer.propTypes = {
 };
 
 export default VarRowContainer;
-// export default connect(mapStateToProps, mapDispatchToProps)(VarRowContainer);

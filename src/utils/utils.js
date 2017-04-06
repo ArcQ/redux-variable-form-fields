@@ -2,7 +2,7 @@ import React from 'react';
 import update from 'immutability-helper';
 
 // update from immutability helper but as a promise so that it can be chained
-export function chainedUpdate(...args) {
+function chainedUpdate(...args) {
   return new Promise(resolve => resolve(update(...args)));
 }
 
@@ -46,10 +46,6 @@ export function findEleWithPropAndModify(ele, row, modifierArr) {
   return undefined;
 }
 
-export function getInitialFormData() {
-  return ([{}]);
-}
-
 function getFilteredPropsByKeys(props, allowedKeysArr) {
   return Object.keys(props)
     .filter(key => allowedKeysArr.includes(key))
@@ -68,4 +64,4 @@ export function passPropsToAllChildren(props, allowedKeysArr) {
     React.cloneElement(child, passProps));
 }
 
-export default { findEleWithPropAndModify, getHandlerCreator, getInitialFormData };
+export default {};
