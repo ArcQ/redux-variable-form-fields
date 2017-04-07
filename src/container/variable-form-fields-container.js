@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
 import { passPropsToAllChildren } from 'utils/utils';
 
-const ReduxVariableFormFieldsContainer = props =>
+const VariableFormFieldsContainer = props =>
   <div>
     { passPropsToAllChildren(props, ['onChange', 'data']) }
   </div>;
 
 
-ReduxVariableFormFieldsContainer.propTypes = {
+VariableFormFieldsContainer.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
@@ -16,4 +16,4 @@ ReduxVariableFormFieldsContainer.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
-export default ReduxVariableFormFieldsContainer;
+export default VariableFormFieldsContainer;
