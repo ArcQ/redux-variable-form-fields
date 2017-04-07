@@ -6,7 +6,7 @@ function getCreateVarInputHandler(createFieldInputHandler, data) {
   return (ele, row) => {
     // remove varInput as it won't be natively compatible with the input element
     const { varInput, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
-    const key = `${ele.key}${row}`;
+    const key = ele.key;
     // if no field.key, we just wont' track it, no err req
     // should probably use React.cloneElement()
     return update(ele,
@@ -15,7 +15,6 @@ function getCreateVarInputHandler(createFieldInputHandler, data) {
         props: {
           $set: {
             ...restProps,
-            key,
             value: (data && data[row][key]) || '',
             onChange: createFieldInputHandler(row, data, key),
           },

@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { getHandlerCreator } from 'utils/utils';
+import update from 'immutability-helper';
 import VarRow from '../components/var-row';
 
 // dataObj refers to the obj/str that the input passes in
