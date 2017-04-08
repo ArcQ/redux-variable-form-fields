@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import update from 'immutability-helper';
+import React from 'react';
+import PropTypes from 'prop-types';
 import VarRow from './var-row';
 
 function getClassNamesStrF(rowName, animateFirst, pendingRemovalRows, addedRows) {
