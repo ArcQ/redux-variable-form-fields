@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { getHandlerCreator } from 'utils/utils';
 import update from 'immutability-helper';
 import VarRow from '../components/var-row';
@@ -22,28 +22,52 @@ function fieldInputHandler([row, data, fieldKey], shapeArr, dataObj) {
   });
 }
 
-function removeRowHandler([row, data]) {
-  return update(data, { $splice: [[row, 1]] });
+function addRemoveAnimationClass(row) {
+  this.setState({
+    pendingRemovalRows: this.state.pendingRemovalRows.concat([row]),
+  });
+  return new Promise((resolve) => {
+    setTimeout(
+      () => {
+        this.setState({
+          pendingRemovalRows: this.state.pendingRemovalRows.filter(e => e !== row),
+        });
+        resolve();
+      },
+      this.props.transitionLeaveTimeout || 0,
+    );
+  });
 }
 
-const VarRowContainer = props => (<div>
-  {
-    VarRow({
-      ...props,
-      createFieldInputHandler: getHandlerCreator(props, fieldInputHandler),
-      createRemoveRowHandler: getHandlerCreator(props, removeRowHandler),
-    })
-  }
-</div>);
-
-VarRowContainer.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.shape({})),
-    PropTypes.element,
-  ]),
-  shapeArr: PropTypes.arrayOf(PropTypes.string),
-  onChange: PropTypes.func,
-  data: PropTypes.arrayOf(PropTypes.shape({})),
+const removeRowHandler = function ([row, data]) {
+  return addRemoveAnimationClass.call(this, row).then(
+    () => update(data, { $splice: [[row, 1]] }),
+  );
 };
+
+class VarRowContainer extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      pendingRemovalRows: [],
+    };
+    this.removeRowHandler = removeRowHandler.bind(this);
+  }
+  render() {
+    return (<div>
+      {
+        VarRow({
+          pendingRemovalRows: this.state.pendingRemovalRows,
+          ...this.props,
+          createFieldInputHandler: getHandlerCreator(this.props, fieldInputHandler),
+          createRemoveRowHandler: getHandlerCreator(
+            this.props,
+            this.removeRowHandler,
+          ),
+        })
+      }
+    </div>);
+  }
+}
 
 export default VarRowContainer;

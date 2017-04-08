@@ -1,5 +1,5 @@
 {
-  "name": "redux-variable-form-fields",
+  "name": "variable-form-fields",
   "description": "Component for a form segment that requires a variable number of rows of custom fields. Uses react.",
   "author": "Eddie Law",
   "user": "ArcQ",
@@ -22,7 +22,7 @@
     "postpublish": "npm run gh-pages && npm run gh-pages:deploy",
     "postinstall": "node lib/post_install.js"
   },
-  "main": "dist/redux-variable-form-fields.js",
+  "main": "dist/variable-form-fields.js",
   "module": "src",
   "jsnext:main": "src",
   "devDependencies": {
@@ -75,11 +75,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ArcQ/redux-variable-form-fields"
+    "url": "https://github.com/ArcQ/variable-form-fields"
   },
-  "homepage": "https://github.com/ArcQ/redux-variable-form-fields",
+  "homepage": "https://github.com/ArcQ/variable-form-fields",
   "bugs": {
-    "url": "https://github.com/ArcQ/redux-variable-form-fields/issues"
+    "url": "https://github.com/ArcQ/variable-form-fields/issues"
   },
   "jest": {
     "collectCoverage": true,
@@ -95,7 +95,6 @@
   "keywords": [
     "react",
     "reactjs",
-    "redux",
     "form"
   ],
   "license": "MIT",
@@ -103,8 +102,6 @@
     "test"
   ],
   "dependencies": {
-    "immutability-helper": "^2.1.1",
-    "react-redux": "^5.0.2",
-    "redux": "^3.6.0"
+    "immutability-helper": "^2.1.1"
   }
 }
