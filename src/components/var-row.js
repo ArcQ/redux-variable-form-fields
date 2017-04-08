@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
-import update from 'immutability-helper';
 import { findEleWithPropAndModify } from 'utils/utils';
+import update from 'immutability-helper';
 
-function getCreateVarInputHandler(createFieldInputHandler, data) {
+function getModifyVarInput(createFieldInputHandler, data) {
   return row => (ele) => {
     // remove varInput as it won't be natively compatible with the input element
     const { varInput, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
@@ -24,8 +24,8 @@ function getCreateVarInputHandler(createFieldInputHandler, data) {
   };
 }
 
-function getCreateVarRemoveHandler(createRemoveRowHandler, data) {
-  return (ele, row) => {
+function getModifyVarRemove(createRemoveRowHandler, data) {
+  return row => (ele) => {
     if (row === 0 && !ele.props.showFirstRow) return undefined;
     // remove varRemove and showFirst as it won't be natively compatible with the button element
     const {
@@ -46,100 +46,43 @@ function getCreateVarRemoveHandler(createRemoveRowHandler, data) {
   };
 }
 
-function getRenderRowF(data, createFieldInputHandler, createRemoveRowHandler, getClassNameStr) {
-  return (field, row) => {
-    const modifierArr = [
-      {
-        propKey: 'varInput',
-        modifier: getCreateVarInputHandler(
-          createFieldInputHandler,
-          data)(row),
-      },
-      {
-        propKey: 'varRemove',
-        modifier: getCreateVarRemoveHandler(
-          createRemoveRowHandler,
-          data),
-      },
-    ];
-    return (<div className={getClassNameStr(row)}>
-      {
-        findEleWithPropAndModify(field, row, modifierArr)
-      }
-    </div>);
-  };
-}
 
-function getClassNamesStrF(rowName, animateFirst, pendingRemovalRows, addedRows) {
-  return (row) => {
-    let classNamesArr = [];
-    const pendingRemovalIndex = pendingRemovalRows.indexOf(row);
-    const addedIndex = addedRows.indexOf(row);
-    switch (true) {
-      case (pendingRemovalIndex !== -1):
-        classNamesArr = ['-leave'];
-        pendingRemovalRows.splice(pendingRemovalIndex, 1);
-        break;
-      case ((addedIndex !== -1) || (animateFirst && (row === 0))):
-        classNamesArr = ['-enter'];
-        addedRows.splice(addedIndex, 1);
-        break;
-      default:
-        break;
-    }
-    return ['']
-      .concat(classNamesArr)
-      .map(suffix => rowName + suffix)
-      .join(' ');
-  };
-}
+function VarRow(props) {
+  const modifierArr = [
+    {
+      propKey: 'varInput',
+      modifier: getModifyVarInput(
+        props.createFieldInputHandler,
+        props.data,
+      )(props.row),
+    },
+    {
+      propKey: 'varRemove',
+      modifier: getModifyVarRemove(
+        props.createRemoveRowHandler,
+        props.data,
+      )(props.row),
+    },
+  ];
 
-function renderInputs(props) {
-  const {
-    createFieldInputHandler,
-    createRemoveRowHandler,
-    children: fieldObj,
-    data,
-    name,
-    pendingRemovalRows,
-    animateFirst,
-    addedRows,
-  } = props;
-
-  const renderRow = getRenderRowF(
-    data,
-    createFieldInputHandler,
-    createRemoveRowHandler,
-    getClassNamesStrF(
-      name,
-      animateFirst,
-      pendingRemovalRows,
-      addedRows,
-    ),
+  if (props.children.constructor !== Array) {
+    return findEleWithPropAndModify(props.children, modifierArr);
+  }
+  return props.children.map(field =>
+    findEleWithPropAndModify(field, modifierArr),
   );
-
-  return data.map((inputState, row) => {
-    if (fieldObj.constructor !== Array) {
-      return renderRow(fieldObj, row);
-    }
-    return fieldObj.map(field =>
-      renderRow(field, row),
-    );
-  });
 }
-
-export const VarRow = props =>
-  <div> { renderInputs(props) } </div>;
 
 VarRow.propTypes = {
-  createFieldInputHandler: PropTypes.func.isRequired,
-  createRemoveRowHandler: PropTypes.func.isRequired,
+  modifierArr: PropTypes.arrayOf(PropTypes.shape({
+    propKey: PropTypes.string,
+    modifier: PropTypes.func,
+  })),
+
   children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
   ]),
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  pendingRowRemoval: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default VarRow;

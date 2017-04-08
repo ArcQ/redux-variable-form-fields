@@ -24,13 +24,13 @@ export function getHandlerCreator(props, handler) {
   for each that contain propKey, apply modifier
   eg of what modifierArr is: [{ propKey:'test' modifier:(ele) => returnNewEle }, ...]
   */
-export function findEleWithPropAndModify(ele, row, modifierArr) {
+export function findEleWithPropAndModify(ele, modifierArr) {
   if (ele && ele.props) {
     /* if ele matches keys in modifierArr, then get newEle from cbObj.cb,
     else newEle will be old ele
     */
     const newEle = modifierArr.reduce(
-      (a, b) => ((ele.props[b.propKey]) ? b.modifier(ele, row) : a)
+      (a, b) => ((ele.props[b.propKey]) ? b.modifier(ele) : a)
       , ele);
     // if key not found, continue search, keep this ele unchanged
     return (ele.props.children)
@@ -38,7 +38,7 @@ export function findEleWithPropAndModify(ele, row, modifierArr) {
         props: {
           children: {
             $set: React.Children.map(ele.props.children, child =>
-              findEleWithPropAndModify(child, row, modifierArr)),
+              findEleWithPropAndModify(child, modifierArr)),
           },
         },
       }) : newEle;

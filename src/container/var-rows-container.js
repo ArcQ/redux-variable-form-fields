@@ -1,7 +1,7 @@
 import React from 'react';
 import { getHandlerCreator } from 'utils/utils';
 import update from 'immutability-helper';
-import VarRow from '../components/var-row';
+import VarRows from '../components/var-rows';
 
 // dataObj refers to the obj/str that the input passes in
 /*
@@ -45,7 +45,7 @@ const removeRowHandler = function ([row, data]) {
   );
 };
 
-class VarRowContainer extends React.Component {
+class VarRowsContainer extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -56,10 +56,13 @@ class VarRowContainer extends React.Component {
   render() {
     return (<div>
       {
-        VarRow({
-          pendingRemovalRows: this.state.pendingRemovalRows,
+        VarRows({
           ...this.props,
-          createFieldInputHandler: getHandlerCreator(this.props, fieldInputHandler),
+          pendingRemovalRows: this.state.pendingRemovalRows,
+          createFieldInputHandler: getHandlerCreator(
+            this.props,
+            fieldInputHandler,
+          ),
           createRemoveRowHandler: getHandlerCreator(
             this.props,
             this.removeRowHandler,
@@ -70,4 +73,4 @@ class VarRowContainer extends React.Component {
   }
 }
 
-export default VarRowContainer;
+export default VarRowsContainer;

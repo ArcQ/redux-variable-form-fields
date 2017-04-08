@@ -31,10 +31,10 @@ const renderInputs = function (props) {
   ];
 
   if (fieldObj.constructor !== Array) {
-    return findEleWithPropAndModify(fieldObj, 0, modifierArr);
+    return findEleWithPropAndModify(fieldObj, modifierArr);
   }
   return fieldObj.map(field =>
-    findEleWithPropAndModify(field, 0, modifierArr),
+    findEleWithPropAndModify(field, modifierArr),
   );
 };
 
@@ -42,13 +42,11 @@ export const VarLast = props =>
   <div> { renderInputs(props) } </div>;
 
 VarLast.propTypes = {
-  createFieldInputHandler: PropTypes.func.isRequired,
-  createRemoveRowHandler: PropTypes.func.isRequired,
+  addRowHandler: PropTypes.func.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
   ]),
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default VarLast;
