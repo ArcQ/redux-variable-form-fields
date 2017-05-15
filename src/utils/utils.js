@@ -32,6 +32,9 @@ export function findEleWithPropAndModify(ele, modifierArr) {
     const newEle = modifierArr.reduce(
       (a, b) => ((ele.props[b.propKey]) ? b.modifier(ele) : a)
       , ele);
+
+    if (!newEle) return undefined;
+
     // if key not found, continue search, keep this ele unchanged
     return (ele.props.children)
       ? update(newEle, {
