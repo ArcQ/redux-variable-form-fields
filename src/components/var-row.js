@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 function getModifyVarInput(createFieldInputHandler, data) {
   return row => (ele) => {
     // remove varInput as it won't be natively compatible with the input element
-    const { varInput, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
+    const { varInput, onChange, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
     const key = ele.key;
     // if no field.key, we just wont' track it, no err req
     // should probably use React.cloneElement()
@@ -16,7 +16,7 @@ function getModifyVarInput(createFieldInputHandler, data) {
           $set: {
             ...restProps,
             value: (data && data[row][key]) || '',
-            onChange: createFieldInputHandler(row, data, key),
+            onChange: createFieldInputHandler(row, data, key, onChange),
           },
         },
       }

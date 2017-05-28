@@ -9,7 +9,8 @@ import VarRows from '../components/var-rows';
   eg. if event.target.value = x then shapeArr = ['target', 'value']
       if event =x then shapeArr = undefined
       */
-function fieldInputHandler([row, data, fieldKey], shapeArr, dataObj) {
+function fieldInputHandler([row, data, fieldKey, onChange], shapeArr, onChangeArgs) {
+  const dataObj = (onChange) ? onChange(...onChangeArgs) : onChangeArgs[0];
   const getNestedValFromKeyArr = (obj, keyArr, i) =>
     ((i < keyArr.length) ? getNestedValFromKeyArr(obj[keyArr[i]], keyArr, i + 1) : obj[keyArr[i]]);
   const fieldData = (shapeArr && shapeArr.length > 0)

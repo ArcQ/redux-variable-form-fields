@@ -13,10 +13,10 @@ function chainedUpdate(...args) {
 // aggregates rendertime + runtime args, passes into handler, then modifies store (modifyVarFields)
 export function getHandlerCreator(props, handler) {
   const { onChange, data, shapeArr } = props;
-  return (...renderArgs) => runtimeArg =>
+  return (...renderArgs) => (...runtimeArgs) =>
     chainedUpdate(
       data,
-      { $set: handler(renderArgs, shapeArr, runtimeArg) },
+      { $set: handler(renderArgs, shapeArr, runtimeArgs) },
     ).then(newFormData => onChange(newFormData));
 }
 
