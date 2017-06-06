@@ -9,8 +9,6 @@ function getCreateVarAddHandler(addRowHandler) {
     // TODO can abstract out refactor!
     const { varAdd, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
     // if no field.key, we just wont' track it, no err req
-    // TODO should probably use React.cloneElement()
-    // TODO what if ele.key has no key, it will throw error tho! because varInput sitll on element
     return update(ele, {
       props: {
         $set: {

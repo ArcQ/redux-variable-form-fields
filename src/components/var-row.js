@@ -7,10 +7,12 @@ function getModifyVarInput(createFieldInputHandler, data) {
     // remove varInput as it won't be natively compatible with the input element
     const { varInput, onChange, ...restProps } = ele.props; // eslint-disable-line no-unused-vars
     const key = ele.key;
+
+    if(!key) console.err('variable-form-fields requires key on all varInput fields');
     // if no field.key, we just wont' track it, no err req
     // should probably use React.cloneElement()
     return update(ele,
-      (ele.key)
+      (key)
       ? {
         props: {
           $set: {
